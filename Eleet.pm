@@ -1,6 +1,6 @@
-# $Id: Eleet.pm,v 0.24 2002/02/07 20:36:52 jquelin Exp $
+# $Id: Eleet.pm,v 0.25 2002/02/08 09:41:17 jquelin Exp $
 #
-# Copyright (c) 2001 Jerome Quelin <jerome.quelin@insalien.org>
+# Copyright (c) 2001 Jerome Quelin <jquelin@cpan.org>
 # All rights reserved.
 #
 # This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ use Carp;
 use IO::Handle;
 
 # Variables of the modules.
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 my %letter;
 
 # Our to allow user to hack/overwrite it.
@@ -425,7 +425,7 @@ compatibility would be ok since a ref to a hash evaluates to true.
 
 =head1 AUTHOR
 
-Jerome Quelin, E<lt>jerome.quelin@insalien.orgE<gt>
+Jerome Quelin, E<lt>jquelin@cpan.orgE<gt>
 
 =head1 SEE ALSO
 
