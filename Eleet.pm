@@ -1,6 +1,6 @@
-# $Id: Eleet.pm,v 0.28 2002/02/09 10:38:45 jquelin Exp $
+# $Id: Eleet.pm,v 1.2 2003/06/12 17:38:24 jquelin Exp $
 #
-# Copyright (c) 2001 Jerome Quelin <jquelin@cpan.org>
+# Copyright (c) 2001-2003 Jerome Quelin <jquelin@cpan.org>
 # All rights reserved.
 #
 # This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ use Carp;
 use IO::Handle;
 
 # Variables of the modules.
-our $VERSION = '0.31';
+our $VERSION = '0.32';
 my %letter;
 
 # Our to allow user to hack/overwrite it.
@@ -331,19 +331,21 @@ sub _transform {
 }
 
 # By default, tie standard filedescriptors.
-tie *STDOUT, __PACKAGE__, *STDOUT;
-tie *STDERR, __PACKAGE__, *STDERR;
+# tie *STDOUT, __PACKAGE__, *STDOUT;
+# tie *STDERR, __PACKAGE__, *STDERR;
 
 
 1;
 __END__
-# Below is stub documentation for your module. You better edit it!
 
 =head1 NAME
 
 Acme::Tie::Eleet - Perl extension to 5pE4k 1Ik3 4n 3l337!
 
+
 =head1 SYNOPSIS
+
+B<!!!See the BUGS section below!!!>
 
   use Acme::Tie::Eleet;
   print "This is eleet!\n";
@@ -357,6 +359,7 @@ Acme::Tie::Eleet - Perl extension to 5pE4k 1Ik3 4n 3l337!
   tie $bar, 'Acme::Tie::Eleet', spacer => 0;
   $bar = "eleet";
   $foo = $bar;
+
 
 =head1 DESCRIPTION
 
@@ -435,6 +438,18 @@ your base are belong to us!
 
 =back
 
+
+=head1 BUGS
+
+B</!\ WARNING>: as of Perl 5.8.0, TIEHANDLE seems to be B<broken>. So,
+I decided to remove ties on STDOUT and STDERR, and commented the
+relevant parts in the test suite.
+
+Don't try to tie a filehandle if you're running a Perl version greater
+or equal to 5.8.0, because you will start a I<deep recursion loop> as
+says Perl... I'll try to fix it when I'll find some time.
+
+
 =head1 TODO
 
 =over 4
@@ -465,9 +480,11 @@ Allow tie-ing for input filehandle.
 
 =back
 
+
 =head1 AUTHOR
 
 Jerome Quelin, E<lt>jquelin@cpan.orgE<gt>
+
 
 =head1 SEE ALSO
 

@@ -1,5 +1,5 @@
 #-*-perl-*-
-# $Id: quotes.t,v 1.4 2002/02/09 08:30:04 jquelin Exp $
+# $Id: quotes.t,v 1.2 2003/06/12 17:23:46 jquelin Exp $
 #
 # Adding quotes.
 #
@@ -10,19 +10,20 @@
 
 # Modules we rely on.
 use Test;
-use POSIX qw(tmpnam);
+# use POSIX qw(tmpnam);
 
 # Initialization.
-BEGIN { plan tests => 4 };
+# BEGIN { plan tests => 4 };
+BEGIN { plan tests => 2 };
 
 # Our stuff.
 require Acme::Tie::Eleet;
-untie *STDIN;
-untie *STDOUT;
-untie *STDERR;
+# untie *STDIN;
+# untie *STDOUT;
+# untie *STDERR;
 
 # Vars.
-my $file = tmpnam();
+# my $file = tmpnam();
 my $line;
 my @opts = 
     ( letters    => 0,
@@ -39,25 +40,25 @@ my @opts =
 #          TIEHANDLE.          #
 #------------------------------#
 
-# Beginning of sentence.
-open OUT, ">$file" or die "Unable to create temporary file: $!";
-tie *OUT, 'Acme::Tie::Eleet', *OUT, @opts, add_before=>100;
-print OUT "eleet";
-untie *OUT;
-open IN, "<$file" or die "Unable to open temporary file: $!";
-$line = <IN>;
-ok($line, qr/^(?!eleet)/);
+# # Beginning of sentence.
+# open OUT, ">$file" or die "Unable to create temporary file: $!";
+# tie *OUT, 'Acme::Tie::Eleet', *OUT, @opts, add_before=>100;
+# print OUT "eleet";
+# untie *OUT;
+# open IN, "<$file" or die "Unable to open temporary file: $!";
+# $line = <IN>;
+# ok($line, qr/^(?!eleet)/);
 
-# End of sentence.
-open OUT, ">$file" or die "Unable to create temporary file: $!";
-tie *OUT, 'Acme::Tie::Eleet', *OUT, @opts, add_after=>100;
-print OUT "eleet";
-untie *OUT;
-open IN, "<$file" or die "Unable to open temporary file: $!";
-$line = <IN>;
-ok($line, qr/(?!eleet$)/);
+# # End of sentence.
+# open OUT, ">$file" or die "Unable to create temporary file: $!";
+# tie *OUT, 'Acme::Tie::Eleet', *OUT, @opts, add_after=>100;
+# print OUT "eleet";
+# untie *OUT;
+# open IN, "<$file" or die "Unable to open temporary file: $!";
+# $line = <IN>;
+# ok($line, qr/(?!eleet$)/);
 
-unlink $file;
+# unlink $file;
 
 
 #------------------------------#

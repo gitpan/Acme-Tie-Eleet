@@ -1,5 +1,5 @@
 #-*-perl-*-
-# $Id: basic.t,v 1.4 2002/02/09 08:32:56 jquelin Exp $
+# $Id: basic.t,v 1.1.1.1 2003/06/12 17:17:41 jquelin Exp $
 #
 # Basic tests.
 #
