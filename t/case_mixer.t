@@ -1,5 +1,7 @@
 #-*-perl-*-
-# $Id: case_mixer.t,v 1.3 2002/02/01 15:50:59 jquelin Exp $
+# $Id: case_mixer.t,v 1.4 2002/02/09 08:16:19 jquelin Exp $
+#
+# Case mixer test suite.
 #
 
 #-----------------------------------#
@@ -11,7 +13,7 @@ use Test;
 use POSIX qw(tmpnam);
 
 # Initialization.
-BEGIN { plan tests => 8 };
+BEGIN { plan tests => 16 };
 
 # Our stuff.
 require Acme::Tie::Eleet;
@@ -33,9 +35,9 @@ my @opts =
 );
 
 
-#-------------------------------#
-#          Case mixer.          #
-#-------------------------------#
+#------------------------------#
+#          TIEHANDLE.          #
+#------------------------------#
 
 # Wrong case_mixer (pattern non numeric).
 eval {
@@ -111,3 +113,58 @@ $line = <IN>;
 ok($line, qr/^ELEET/);
 
 unlink $file;
+
+
+#------------------------------#
+#          TIESCALAR.          #
+#------------------------------#
+
+# Wrong case_mixer (pattern non numeric).
+eval {
+    tie $line, 'Acme::Tie::Eleet', @opts, case_mixer=>"aa";
+};
+ok($@, qr/^case_mixer: wrong pattern /);
+
+# Random: no case mixing (0).
+tie $line, 'Acme::Tie::Eleet', @opts, case_mixer=>0;
+$line = "eleet";
+ok($line, qr/^eleet/);
+untie $line;
+
+# Random: case mixing (75).
+tie $line, 'Acme::Tie::Eleet', @opts, case_mixer=>75;
+$line = "eleet";
+ok($line, qr/^[eE][lL][eE][eE][tT]/);
+untie $line;
+
+# Random: max case mixing (100).
+tie $line, 'Acme::Tie::Eleet', @opts, case_mixer=>100;
+$line = "eleet";
+ok($line, qr/^ELEET/);
+untie $line;
+
+# Pattern: illegal pattern (0/0).
+eval {
+    tie $line, 'Acme::Tie::Eleet', @opts, case_mixer=>"0/0";
+    die $line;
+};
+ok($@, qr!^case_mixer: illegal pattern 0/0!);
+untie $line;
+
+# Pattern: no case mixing (0/1).
+tie $line, 'Acme::Tie::Eleet', @opts, case_mixer=>"0/1";
+$line = "eleet";
+ok($line, qr/^eleet/);
+untie $line;
+
+# Pattern: one on two (1/2).
+tie $line, 'Acme::Tie::Eleet', @opts, case_mixer=>"1/1";
+$line = "eleet";
+ok($line, qr/^ElEeT/);
+untie $line;
+
+# Pattern: max case mixing (1/0).
+tie $line, 'Acme::Tie::Eleet', @opts, case_mixer=>"1/0";
+$line = "eleet";
+ok($line, qr/^ELEET/);
+untie $line;

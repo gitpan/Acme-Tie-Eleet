@@ -1,5 +1,7 @@
 #-*-perl-*-
-# $Id: quotes.t,v 1.3 2002/02/01 15:50:36 jquelin Exp $
+# $Id: quotes.t,v 1.4 2002/02/09 08:30:04 jquelin Exp $
+#
+# Adding quotes.
 #
 
 #-----------------------------------#
@@ -11,7 +13,7 @@ use Test;
 use POSIX qw(tmpnam);
 
 # Initialization.
-BEGIN { plan tests => 2 };
+BEGIN { plan tests => 4 };
 
 # Our stuff.
 require Acme::Tie::Eleet;
@@ -33,9 +35,9 @@ my @opts =
 );
 
 
-#----------------------------------#
-#          Adding quotes.          #
-#----------------------------------#
+#------------------------------#
+#          TIEHANDLE.          #
+#------------------------------#
 
 # Beginning of sentence.
 open OUT, ">$file" or die "Unable to create temporary file: $!";
@@ -56,3 +58,20 @@ $line = <IN>;
 ok($line, qr/(?!eleet$)/);
 
 unlink $file;
+
+
+#------------------------------#
+#          TIESCALAR.          #
+#------------------------------#
+
+# Beginning of sentence.
+tie $line, 'Acme::Tie::Eleet', @opts, add_before=>100;
+$line = "eleet";
+ok($line, qr/^(?!eleet)/);
+untie $line;
+
+# End of sentence.
+tie $line, 'Acme::Tie::Eleet', @opts, add_after=>100;
+$line = "eleet";
+ok($line, qr/(?!eleet$)/);
+untie $line;

@@ -1,7 +1,15 @@
-# $Id: Changes,v 1.13 2002/02/08 11:18:13 jquelin Exp $
+# $Id: Changes,v 1.14 2002/02/09 08:43:52 jquelin Exp $
 
 Revision history for Perl extension Acme::Tie::Eleet.
 
+0.31  Sat Feb  9 09:43:34 CET 2002
+
+      Now able to perform a TIESCALAR
+	  (idea from Jorrit Waalboer <jwaalboer@convolution.nl>).
+      Test suite updated.
+      Documentation updated.
+
+ 
 0.20  Fri Feb  8 12:18:02 CET 2002
 
       Minor change in documentation.

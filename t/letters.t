@@ -1,5 +1,7 @@
 #-*-perl-*-
-# $Id: letters.t,v 1.4 2002/02/01 16:35:25 jquelin Exp $
+# $Id: letters.t,v 1.5 2002/02/09 08:19:26 jquelin Exp $
+#
+# Translitterations.
 #
 
 #-----------------------------------#
@@ -11,7 +13,7 @@ use Test;
 use POSIX qw(tmpnam);
 
 # Initialization.
-BEGIN { plan tests => 3 };
+BEGIN { plan tests => 6 };
 
 # Our stuff.
 require Acme::Tie::Eleet;
@@ -33,9 +35,9 @@ my @opts =
 );
 
 
-#-------------------------------------#
-#          Translitteration.          #
-#-------------------------------------#
+#------------------------------#
+#          TIEHANDLE.          #
+#------------------------------#
 
 # No translitteration.
 open OUT, ">$file" or die "Unable to create temporary file: $!";
@@ -65,3 +67,26 @@ $line = <IN>;
 ok($line, qr/^3[1|]33[7+]/);
 
 unlink $file;
+
+
+#------------------------------#
+#          TIESCALAR.          #
+#------------------------------#
+
+# No translitteration.
+tie $line, 'Acme::Tie::Eleet', @opts, letters=>0;
+$line = "eleet";
+ok($line, qr/^eleet/);
+untie $line;
+
+# Random translitteration.
+tie $line, 'Acme::Tie::Eleet', @opts, letters=>50;
+$line = "eleet";
+ok($line, qr/^[e3][l1|][e3][e3][t7+]/);
+untie $line;
+
+# Full translitteration.
+tie $line, 'Acme::Tie::Eleet', @opts, letters=>100;
+$line = "eleet";
+ok($line, qr/^3[1|]33[7+]/);
+untie $line;

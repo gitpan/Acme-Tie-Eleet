@@ -9,7 +9,7 @@ DESCRIPTION
     specially made for u, Ye4h M4n!
 
     This module basically allows you to perform a tie on filehandles,
-    converting text written to it - and even read from!
+    converting text written to it!
 
     And since it's quite difficult to do urself a tie, the module will also
     tie the 2 (no, not the letter 'S', the figure, u b4st4rd) standard file
@@ -28,12 +28,12 @@ INSTALLATION
 
 AUTHOR
 
-    Jerome Quelin, <jerome.quelin@insalien.org>
+    Jerome Quelin, <jquelin@cpan.org>
 
 
 COPYRIGHT
 
-    Copyright (c) 2001 Jerome Quelin <jerome.quelin@insalien.org>
+    Copyright (c) 2001 Jerome Quelin <jquelin@cpan.org>
     All rights reserved.
 
     This program is free software; you can redistribute it and/or

@@ -1,5 +1,7 @@
 #-*-perl-*-
-# $Id: spacer.t,v 1.3 2002/02/01 15:49:34 jquelin Exp $
+# $Id: spacer.t,v 1.4 2002/02/09 08:25:52 jquelin Exp $
+#
+# Spacer.
 #
 
 #-----------------------------------#
@@ -11,7 +13,7 @@ use Test;
 use POSIX qw(tmpnam);
 
 # Initialization.
-BEGIN { plan tests => 8 };
+BEGIN { plan tests => 16 };
 
 # Our stuff.
 require Acme::Tie::Eleet;
@@ -33,9 +35,9 @@ my @opts =
 );
 
 
-#---------------------------#
-#          Spacer.          #
-#---------------------------#
+#------------------------------#
+#          TIEHANDLE.          #
+#------------------------------#
 
 # Wrong spacer (pattern non numeric).
 eval { 
@@ -106,3 +108,58 @@ $line = <IN>;
 ok($line, qr/^e l e e t /);
 
 unlink $file;
+
+
+#------------------------------#
+#          TIESCALAR.          #
+#------------------------------#
+
+# Wrong spacer (pattern non numeric).
+eval { 
+    tie $line, 'Acme::Tie::Eleet', @opts, spacer=>"aa";
+};
+ok($@, qr/^spacer: wrong pattern /);
+untie $line;
+
+# Random: no spacing (0).
+tie $line, 'Acme::Tie::Eleet', @opts, spacer=>0;
+$line = "eleet";
+ok($line, qr/^e ?l ?e ?e ?t ?/);
+untie $line;
+
+# Random: spacing (75).
+tie $line, 'Acme::Tie::Eleet', @opts, spacer=>75;
+$line = "eleet";
+ok($line, qr/^e ?l ?e ?e ?t ?/);
+untie $line;
+
+# Random: max spacing (100).
+tie $line, 'Acme::Tie::Eleet', @opts, spacer=>100;
+$line = "eleet";
+ok($line, qr/^e l e e t /);
+untie $line;
+
+# Pattern: illegal pattern (0/0).
+eval {
+    tie $line, 'Acme::Tie::Eleet', @opts, spacer=>"0/0";
+};
+ok($@, qr!^spacer: illegal pattern 0/0!);
+untie $line;
+
+# Pattern: no spacing (0/1).
+tie $line, 'Acme::Tie::Eleet', @opts, spacer=>"0/1";
+$line = "eleet";
+ok($line, qr/^eleet/);
+untie $line;
+
+# Pattern: one on two (1/1).
+tie $line, 'Acme::Tie::Eleet', @opts, spacer=>"1/1";
+$line = "eleeteleet";
+ok($line, qr/^e le et el ee t/);
+untie $line;
+
+# Pattern: max spacing (1/0).
+tie $line, 'Acme::Tie::Eleet', @opts, spacer=>"1/0";
+$line = "eleet";
+ok($line, qr/^e l e e t /);
+untie $line;

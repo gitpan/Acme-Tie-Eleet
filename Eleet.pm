@@ -1,4 +1,4 @@
-# $Id: Eleet.pm,v 0.26 2002/02/08 11:17:25 jquelin Exp $
+# $Id: Eleet.pm,v 0.27 2002/02/09 08:43:25 jquelin Exp $
 #
 # Copyright (c) 2001 Jerome Quelin <jquelin@cpan.org>
 # All rights reserved.
@@ -22,7 +22,7 @@ use Carp;
 use IO::Handle;
 
 # Variables of the modules.
-our $VERSION = '0.20';
+our $VERSION = '0.30';
 my %letter;
 
 # Our to allow user to hack/overwrite it.
@@ -84,17 +84,9 @@ our %words  =
 #          Constructor.          #
 #--------------------------------#
 
-sub TIEHANDLE {
-    # Process args.
-    my $pkg = shift;
-    my $fh  = shift;
-    ref $pkg and croak "Not an instance method";
-    $fh or croak "Filehandle is not an optional paramater";
-    $fh->autoflush(1);
-
+sub _new {
     # Create object.
     my $self = {
-	FH => $fh,
 	letters    => 25,    # transform o to 0, l to 1, etc.
 	spacer     => "1/0", # %age 0=no extra spaces, 'm/n'=m extra+n noextra, 60=3/5 at random
 	case_mixer => 50,    # %age 0=nothing, 'm/n'=m ucase+n lcase, 25=1/4 at random
@@ -123,9 +115,37 @@ sub TIEHANDLE {
 	and $self->{_space}    = "n0";
     $self->{case_mixer} =~ m!^(\d+)/(\d+)$! && $1 == 0
 	and $self->{_case_mix} = "n0";
+
+    # Return the hash ref.
+    return $self;
+}
+
+sub TIEHANDLE {
+    # Process args.
+    my $pkg = shift;
+    my $fh  = shift;
+    ref $pkg and croak "Not an instance method";
+    
+    $fh or croak "Filehandle is not an optional paramater";
+    $fh->autoflush(1);
+
+    my $self  = &_new; # magic call.
+    $self->{FH} = $fh;
     
     # Return it.
-    return bless( $self, $pkg);
+    return bless( $self, $pkg );
+}
+
+sub TIESCALAR {
+    # Process args.
+    my $pkg = shift;
+    ref $pkg and croak "Not an instance method";
+    
+    my $self  = &_new; # magic call.
+    $self->{value} = undef;
+    
+    # Return it.
+    return bless( $self, $pkg );
 }
 
 
@@ -133,12 +153,23 @@ sub TIEHANDLE {
 #          Handlers.          #
 #-----------------------------#
 
+# Catch scalar fetching.
+sub FETCH {
+    my $self = shift;
+    return $self->_transform( $self->{value} );
+}
+
 # Catch calls to print.
 sub PRINT {
     my $self = shift;
     my $fh = $self->{FH};
     $_[0] or return;
     print $fh $self->_transform(join "", @_);
+}
+
+# Catch scalar storing.
+sub STORE {
+    $_[0]{value} = $_[1];
 }
 
 
@@ -276,6 +307,7 @@ sub _apply_words {
 sub _transform {
     my ($self, $line) = @_;
 
+    $line or return; # Case undef.
     my $sentence;
     my @what = split "([.?!\n])", lc $line;
     while ( my ($what, $punc) = splice @what, 0, 2 ) {
@@ -322,6 +354,9 @@ Acme::Tie::Eleet - Perl extension to 5pE4k 1Ik3 4n 3l337!
   Or, even, to translate instant sentences:
   perl -MAcme::Tie::Eleet -p -e ''
 
+  tie $bar, 'Acme::Tie::Eleet', spacer => 0;
+  $bar = "eleet";
+  $foo = $bar;
 
 =head1 DESCRIPTION
 
@@ -332,14 +367,15 @@ Well, there's a solution, and you're reading the documentation of the
 module specially made for u, Ye4h M4n!
 
 This module basically allows you to perform a tie on filehandles,
-converting text written to it.
+converting text written to it; or a tie on scalars, converting text
+they holds.
 
 And since it's quite difficult to do urself a tie, the module will
 also tie the 2 (no, not the letter 'S', the figure, u b4st4rd)
 standard output file descriptors perl comes with (aka, STDOUT and
 STDERR). A simple use of the module and you're ready to go! Fe4R u5!
 
-=head2 Parameters supported by tie
+=head2 Parameters supported by tie (both TIEHANDLE and TIESCALAR)
 
 =over 4
 
@@ -422,6 +458,12 @@ evaluates to true.
 
 Allow user to provide an array of quotes to add. Backward
 compatibility would be ok since a ref to a hash evaluates to true.
+
+=item o
+
+Allow tie-ing for input filehandle.
+
+=back
 
 =head1 AUTHOR
 

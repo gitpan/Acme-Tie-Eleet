@@ -1,6 +1,8 @@
 #-*-perl-*-
-# $Id: words.t,v 1.3 2002/02/01 15:50:26 jquelin Exp $
+# $Id: words.t,v 1.4 2002/02/09 08:32:24 jquelin Exp $
 #
+# Words replacement.
+# 
 
 #-----------------------------------#
 #          Initialization.          #
@@ -11,7 +13,7 @@ use Test;
 use POSIX qw(tmpnam);
 
 # Initialization.
-BEGIN { plan tests => 3 };
+BEGIN { plan tests => 6 };
 
 # Our stuff.
 require Acme::Tie::Eleet;
@@ -33,9 +35,9 @@ my @opts =
 );
 
 
-#--------------------------------------#
-#          Words replacement.          #
-#--------------------------------------#
+#------------------------------#
+#          TIEHANDLE.          #
+#------------------------------#
 
 # No replacement.
 open OUT, ">$file" or die "Unable to create temporary file: $!";
@@ -65,3 +67,26 @@ $line = <IN>;
 ok($line, qr/^(kewl|kool)/);
 
 unlink $file;
+
+
+#------------------------------#
+#          TIESCALAR.          #
+#------------------------------#
+
+# No replacement.
+tie $line, 'Acme::Tie::Eleet', @opts, words=>0;
+$line = "sthg";
+ok($line, qr/^sthg/);
+untie $line;
+
+# Word replacement.
+tie $line, 'Acme::Tie::Eleet', @opts, words=>1;
+$line = "hacker";
+ok($line, qr/^haxor/);
+untie $line;
+
+# Word replacement with an anonymous array.
+tie $line, 'Acme::Tie::Eleet', @opts, words=>1;
+$line = "cool";
+ok($line, qr/^(kewl|kool)/);
+untie $line;
