@@ -1,4 +1,4 @@
-# $Id: Eleet.pm,v 0.25 2002/02/08 09:41:17 jquelin Exp $
+# $Id: Eleet.pm,v 0.26 2002/02/08 11:17:25 jquelin Exp $
 #
 # Copyright (c) 2001 Jerome Quelin <jquelin@cpan.org>
 # All rights reserved.
@@ -22,7 +22,7 @@ use Carp;
 use IO::Handle;
 
 # Variables of the modules.
-our $VERSION = '0.19';
+our $VERSION = '0.20';
 my %letter;
 
 # Our to allow user to hack/overwrite it.
@@ -332,7 +332,7 @@ Well, there's a solution, and you're reading the documentation of the
 module specially made for u, Ye4h M4n!
 
 This module basically allows you to perform a tie on filehandles,
-converting text written to it - and even read from!
+converting text written to it.
 
 And since it's quite difficult to do urself a tie, the module will
 also tie the 2 (no, not the letter 'S', the figure, u b4st4rd)
