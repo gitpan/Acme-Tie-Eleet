@@ -1,0 +1,11 @@
+Changes
+Eleet.pm
+Makefile.PL
+MANIFEST
+README
+t/basic.t
+t/case_mixer.t
+t/letters.t
+t/quotes.t
+t/spacer.t
+t/words.t
