@@ -1,6 +1,9 @@
-# $Id: Changes,v 1.3 2003/06/12 17:39:06 jquelin Exp $
+# $Id: Changes,v 1.4 2003/10/12 13:43:39 jquelin Exp $
 
 Revision history for Perl extension Acme::Tie::Eleet.
+
+0.33  Sun Oct 12 15:43:05 CEST 2003
+      - typo in %words
 
 0.32  Thu Jun 12 19:24:15 CEST 2003
       - TIEHANDLE seems to be broken on Perl >= 5.8.0, so...

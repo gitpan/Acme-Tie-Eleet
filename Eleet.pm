@@ -1,4 +1,4 @@
-# $Id: Eleet.pm,v 1.2 2003/06/12 17:38:24 jquelin Exp $
+# $Id: Eleet.pm,v 1.4 2003/10/12 13:43:53 jquelin Exp $
 #
 # Copyright (c) 2001-2003 Jerome Quelin <jquelin@cpan.org>
 # All rights reserved.
@@ -22,7 +22,7 @@ use Carp;
 use IO::Handle;
 
 # Variables of the modules.
-our $VERSION = '0.32';
+our $VERSION = '0.33';
 my %letter;
 
 # Our to allow user to hack/overwrite it.
@@ -53,7 +53,7 @@ our %words  =
       rule      => "rulez",
       see       => "c",
       the       => "da",
-      wars      => "warez",
+      wares     => "warez",
       you       => "u",
 );
 	     
