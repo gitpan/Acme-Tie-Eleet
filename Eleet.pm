@@ -1,4 +1,4 @@
-# $Id: Eleet.pm,v 0.27 2002/02/09 08:43:25 jquelin Exp $
+# $Id: Eleet.pm,v 0.28 2002/02/09 10:38:45 jquelin Exp $
 #
 # Copyright (c) 2001 Jerome Quelin <jquelin@cpan.org>
 # All rights reserved.
@@ -22,7 +22,7 @@ use Carp;
 use IO::Handle;
 
 # Variables of the modules.
-our $VERSION = '0.30';
+our $VERSION = '0.31';
 my %letter;
 
 # Our to allow user to hack/overwrite it.
