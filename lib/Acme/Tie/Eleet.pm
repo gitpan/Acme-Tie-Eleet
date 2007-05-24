@@ -1,29 +1,33 @@
-# $Id: Eleet.pm,v 1.4 2003/10/12 13:43:53 jquelin Exp $
 #
-# Copyright (c) 2001-2003 Jerome Quelin <jquelin@cpan.org>
-# All rights reserved.
+# This file is part of Acme::Tie::Eleet.
+# Copyright (c) 2001-2007 Jerome Quelin, all rights reserved.
 #
-# This program is free software; you can redistribute it and/or
-# modify it under the same terms as Perl itself.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or (at
+# your option) any later version.
 #
-
-#-----------------------------------#
-#          Initialization.          #
-#-----------------------------------#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+#
 
 package Acme::Tie::Eleet;
 
-# A little anal retention :-)
 use strict;
 use warnings;
 
-# Modules we relied upon.
 use Carp;
 use IO::Handle;
 
-# Variables of the modules.
-our $VERSION = '0.33';
-my %letter;
+our $VERSION = '1.0.0';
+
 
 # Our to allow user to hack/overwrite it.
 our @beg = ( "hey man, ", "hey dude, ", "cool, ", '$#$!#!$ ', "sure, ", "hey, ",
@@ -32,7 +36,7 @@ our @end = ( ", fear us.", ", d'ya think so?",  ' $#$!#!$!' );
 our @sentences = ( "Fear us!", "All your base are belong to us!",
 		   "Resistance is futile; you will be assimilated.",
 		   "Resistance is futile.", "Whololo!" );
-our %words  = 
+our %words  =
     ( apps      => "appz",
       are       => "r",
       awesome   => "awesum",
@@ -56,10 +60,10 @@ our %words  =
       wares     => "warez",
       you       => "u",
 );
-	     
+
 
 # Populate the hash.
-%letter = 
+my %letter =
     ( a => [ "4", "@" ],
       c => "(",
       e => "3",
@@ -80,9 +84,9 @@ our %words  =
       z => "2",
       );
 
-#--------------------------------#
-#          Constructor.          #
-#--------------------------------#
+
+#--
+# Constructor
 
 sub _new {
     # Create object.
@@ -101,13 +105,13 @@ sub _new {
     };
 
     # Check patterns.
-    $self->{spacer} =~ m!^(((\d+)/(\d+))|(\d+))$! 
+    $self->{spacer} =~ m!^(((\d+)/(\d+))|(\d+))$!
 	or  croak "spacer: wrong pattern $self->{spacer}";
-    $self->{spacer} =~ m!^(\d+)/(\d+)$! && $1+$2 == 0 
+    $self->{spacer} =~ m!^(\d+)/(\d+)$! && $1+$2 == 0
 	and croak "spacer: illegal pattern $self->{spacer}";
-    $self->{case_mixer} =~ m!^(((\d+)/(\d+))|(\d+))$! 
+    $self->{case_mixer} =~ m!^(((\d+)/(\d+))|(\d+))$!
 	or  croak "case_mixer: wrong pattern $self->{case_mixer}";
-    $self->{case_mixer} =~ m!^(\d+)/(\d+)$! && $1+$2 == 0 
+    $self->{case_mixer} =~ m!^(\d+)/(\d+)$! && $1+$2 == 0
 	and croak "case_mixer: illegal pattern $self->{case_mixer}";
 
     # Init internals.
@@ -120,38 +124,39 @@ sub _new {
     return $self;
 }
 
+
 sub TIEHANDLE {
     # Process args.
     my $pkg = shift;
     my $fh  = shift;
     ref $pkg and croak "Not an instance method";
-    
+
     $fh or croak "Filehandle is not an optional paramater";
     $fh->autoflush(1);
 
     my $self  = &_new; # magic call.
     $self->{FH} = $fh;
-    
+
     # Return it.
     return bless( $self, $pkg );
 }
+
 
 sub TIESCALAR {
     # Process args.
     my $pkg = shift;
     ref $pkg and croak "Not an instance method";
-    
+
     my $self  = &_new; # magic call.
     $self->{value} = undef;
-    
+
     # Return it.
     return bless( $self, $pkg );
 }
 
 
-#-----------------------------#
-#          Handlers.          #
-#-----------------------------#
+#--
+# Handlers.
 
 # Catch scalar fetching.
 sub FETCH {
@@ -173,9 +178,8 @@ sub STORE {
 }
 
 
-#-----------------------------------------#
-#          Modification plugins.          #
-#-----------------------------------------#
+#--
+# Modification plugins.
 
 #
 # All plugins will get (not counting the object that will always be
@@ -249,7 +253,7 @@ sub _apply_letters {
     my ($self, $target) = @_;
 
     return join "", map { rand(100) < $self->{letters} && exists $letter{$_} ?
-			      ( ref($letter{$_}) eq ref([]) ) ? 
+			      ( ref($letter{$_}) eq ref([]) ) ?
 				  $letter{$_}[rand( @{$letter{$_}} ) ] :
 				      $letter{$_}
 			  : $_ } split //, $target;
@@ -358,7 +362,7 @@ B<!!!See the BUGS section below!!!>
 
   tie $bar, 'Acme::Tie::Eleet', spacer => 0;
   $bar = "eleet";
-  $foo = $bar;
+  print $bar;
 
 
 =head1 DESCRIPTION
@@ -378,6 +382,7 @@ also tie the 2 (no, not the letter 'S', the figure, u b4st4rd)
 standard output file descriptors perl comes with (aka, STDOUT and
 STDERR). A simple use of the module and you're ready to go! Fe4R u5!
 
+
 =head2 Parameters supported by tie (both TIEHANDLE and TIESCALAR)
 
 =over 4
@@ -387,6 +392,7 @@ STDERR). A simple use of the module and you're ready to go! Fe4R u5!
 The parameter allow you to transform letters to corresponding number
 (ie, transform l to 1, e to 3, etc.) with a given percentage. Default
 is 25 (1 char out of 4 being translitterate - if possible). That's 31337!
+
 
 =item o spacer     => <percentage>|<pattern>
 
@@ -400,6 +406,7 @@ will add an extra space after one char out of two, whereas 'spacer =>
 "1/0" will add extra spaces after each char. Default is 0 (no extra
 space). T h a t   r o c k s !
 
+
 =item o case_mixer => <percentage>|<pattern>
 
 Put some chars into uppercase. You can tell it to convert random chars
@@ -412,10 +419,12 @@ then left one char unchanged; whereas 'case_mixer => "0/1"' won't
 convert any chars. Default is 50 (random 1 out of 2). CaSE mIxIng
 RUleZ!
 
+
 =item o words      => <true>|<false>
 
 Transform words given a dictionnary. For exampe, transform 'hacker' to
 'haxor', and so on... Either true or false, default to false. Kewl stuff!
+
 
 =item o add_before => <percentage>
 
@@ -423,11 +432,13 @@ Add some preamble randomly with a given percentage. For example, it
 could transform "this is my sentence." to "Yeah man, this is my
 sentence.". Default to 15.
 
+
 =item o add_after  => <percentage>
 
 Terminate a sentence randomly with an hacker expression according to a
 given percentage. For example, it could transform "this is my
 sentence." to "this is my sentence, fear us.". Default to 15.
+
 
 =item o extra_sent => <percentage>
 
@@ -435,6 +446,7 @@ Add randomly whole sentences to the filehandle. If filehandle is read
 from, it won't return the next chunk of text, but rather a leave it
 where it stands and return a sentence of its own. Default to 10. All
 your base are belong to us!
+
 
 =back
 
@@ -458,10 +470,12 @@ says Perl... I'll try to fix it when I'll find some time.
 
 Find more h4x0R quotes to add.
 
+
 =item o
 
 Allow user to provide a dictionnary for words. Backward compatibility
 would be ok since a ref to a hash evaluates to true.
+
 
 =item o
 
@@ -469,10 +483,12 @@ Allow user to provide a hash of quotes for both add_before /
 add_after. Backward compatibility would be ok since a ref to a hash
 evaluates to true.
 
+
 =item o
 
 Allow user to provide an array of quotes to add. Backward
 compatibility would be ok since a ref to a hash evaluates to true.
+
 
 =item o
 
@@ -481,13 +497,42 @@ Allow tie-ing for input filehandle.
 =back
 
 
-=head1 AUTHOR
+=head1 BUGS
 
-Jerome Quelin, E<lt>jquelin@cpan.orgE<gt>
+Please report any bugs or feature requests to C<bug-acme-tie-eleet at
+rt.cpan.org>, or through the web interface at
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Acme-Tie-Eleet>.
+I will be notified, and then you'll automatically be notified of progress on
+your bug as I make changes.
+
 
 
 =head1 SEE ALSO
 
 L<perl>, the L<news://alt.2600> newsgroup, L<http://www.google.com/intl/xx-hacker/>.
+
+
+=head1 AUTHOR
+
+Jerome Quelin, C<< <jquelin at cpan.org> >>
+
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2001-2007 Jerome Quelin, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 =cut

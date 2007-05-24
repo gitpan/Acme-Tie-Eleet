@@ -1,5 +1,6 @@
 Acme::Tie::Eleet - Perl extension to 5pE4k 1Ik3 4n 3l337!
 
+
 DESCRIPTION
 
     Have you ever wanted to speak like an eleet? Do you feel like it's too
@@ -20,10 +21,18 @@ DESCRIPTION
 INSTALLATION
 
     To install this module type the following:
-       perl Makefile.PL
-       make
-       make test
-       make install
+        perl Makefile.PL
+        make
+        make test
+        make install
+        make clean
+
+    Or using Module::Build:
+        perl Build.PL
+        ./Build
+        ./Build test
+        ./Build install
+        ./Build realclean
 
 
 AUTHOR
@@ -33,24 +42,25 @@ AUTHOR
 
 COPYRIGHT
 
-    Copyright (c) 2001 Jerome Quelin <jquelin@cpan.org>
+    Copyright (c) 2001-2007 Jerome Quelin <jquelin@cpan.org>
     All rights reserved.
 
     This program is free software; you can redistribute it and/or
-    modify it under the same terms as Perl itself.
+    modify it according to GPL v2 or (at your option) any later
+    version. See LICENSE file.
 
 
 TODO
 
     - Find more h4x0R quotes to add.
-    - Allow user to provide a dictionnary for words. Back­
-      ward compatibility would be ok since a ref to a hash
-      evaluates to true.
-    - Allow user to provide a hash of quotes for both
-      add_before / add_after. Backward compatibility would
-      be ok since a ref to a hash evaluates to true.
-    - Allow user to provide an array of quotes to add. Back­
-      ward compatibility would be ok since a ref to a hash
-      evaluates to true.
+    - Allow user to provide a dictionnary for words. Backward
+      compatibility would be ok since a ref to a hash evaluates
+      to true.
+    - Allow user to provide a hash of quotes for both add_before /
+      add_after. Backward compatibility would be ok since a ref to
+      a hash evaluates to true.
+    - Allow user to provide an array of quotes to add. Backward
+      compatibility would be ok since a ref to a hash evaluates
+      to true.
 
 
