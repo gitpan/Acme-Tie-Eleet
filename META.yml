@@ -1,16 +1,16 @@
 ---
 name: Acme-Tie-Eleet
-version: 1.0.0
+version: 1.0.1
 author:
   - 'Jerome Quelin <jquelin@cpan.org>'
 abstract: Perl extension to 5pE4k 1Ik3 4n 3l337!
-license: gpl
+license: perl
 resources:
-  license: http://www.opensource.org/licenses/gpl-license.php
+  license: http://dev.perl.org/licenses/
 provides:
   Acme::Tie::Eleet:
     file: lib/Acme/Tie/Eleet.pm
-    version: 1.0.0
+    version: 1.0.1
 generated_by: Module::Build version 0.2806
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html

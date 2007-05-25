@@ -12,7 +12,10 @@ High-level changelog
 Low-level changelog
 ===================
 
-1.0.0
+1.0.1 Fri May 25 10:47:34 CEST 2007
+ - change license back to perl
+
+1.0.0 Thu May 24 17:21:23 CEST 2007
  - change license to gpl
  - module officially registered in pause
  - change versioning to x.y.z
