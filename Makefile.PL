@@ -8,6 +8,7 @@
 #
 #
 
+BEGIN { require 5.006; }
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
@@ -18,7 +19,9 @@ WriteMakefile(
     VERSION_FROM        => 'lib/Acme/Tie/Eleet.pm',
     ABSTRACT_FROM       => 'lib/Acme/Tie/Eleet.pm',
     LICENSE             => 'perl',
-    PREREQ_PM => {},
+    PREREQ_PM => {
+        'Test::More'    => 0,
+    },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => [
                 'Acme-Tie-Eleet-*',

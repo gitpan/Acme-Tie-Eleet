@@ -15,7 +15,7 @@ use warnings;
 use Carp;
 use IO::Handle;
 
-our $VERSION = '1.0.1';
+our $VERSION = '1.0.2';
 
 
 # Our to allow user to hack/overwrite it.
